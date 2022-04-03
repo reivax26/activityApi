@@ -15,10 +15,14 @@ import java.util.List;
 
 public class Postadapter extends RecyclerView.Adapter<Postadapter.ViewHolder> {
 
-    private final List<Post> postList;
+    private static List<Post> postList;
 
     public Postadapter(List<Post> postList) {
-        this.postList = postList;
+        Postadapter.postList = postList;
+    }
+
+    public static List<Post> getTarea() {
+        return postList;
     }
 
     @NonNull
@@ -80,6 +84,10 @@ public class Postadapter extends RecyclerView.Adapter<Postadapter.ViewHolder> {
             } else {
                 textView.setText(postList.get(position).getTitle());
             }
+        }
+
+        public List<Post> getTarea() {
+            return postList;
         }
     }
 

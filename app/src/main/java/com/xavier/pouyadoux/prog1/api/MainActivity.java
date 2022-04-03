@@ -8,15 +8,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.xavier.pouyadoux.prog1.api.Api.Apiclient;
 import com.xavier.pouyadoux.prog1.api.model.Post;
 import com.xavier.pouyadoux.prog1.api.model.Postadapter;
 
@@ -26,10 +23,10 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
+
+
 
     RecyclerView recyclerView;
     ProgressBar progressBar;
@@ -43,14 +40,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recyclerView = (RecyclerView) findViewById(R.id.tarea_recyclerView);
+
+
+        recyclerView = findViewById(R.id.tarea_recyclerView);
         progressBar = findViewById(R.id.progressBar);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new Postadapter(postList);
         recyclerView.setAdapter(adapter);
 
+
+
         fetchPosts();
+
+
 
         /**
          * boton para añadir nueva tarea
@@ -66,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
                 if (fragment == null) {
-                    fragment = new Fragment();
+                    fragment = new ListFragment(postList);
                     fm.beginTransaction()
                             .add(R.id.fragment_container, fragment)
                             .commit();
@@ -77,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void  fetchPosts(){
+
+    private void fetchPosts() {
         progressBar.setVisibility(View.VISIBLE);
         Retrofitclient.getREtrofitClient().getPost().enqueue(new Callback<List<Post>>() {
             @SuppressLint("NotifyDataSetChanged")
@@ -85,14 +89,14 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
                 if (response.isSuccessful() && response.body() != null)
                     postList.addAll(response.body());
-                    adapter.notifyDataSetChanged();
-                    progressBar.setVisibility(View.GONE);
+                adapter.notifyDataSetChanged();
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onFailure(Call<List<Post>> call, Throwable t) {
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(MainActivity.this, "Error: " + t.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
