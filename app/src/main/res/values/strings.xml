@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">api</string>
+    <string name="titulo_tarea">Titulo Tarea</string>
+    <string name="Titulo_main_activity">Tareas</string>
 </resources>
