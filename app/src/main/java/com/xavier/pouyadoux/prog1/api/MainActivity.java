@@ -1,12 +1,16 @@
 package com.xavier.pouyadoux.prog1.api;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -48,11 +52,35 @@ public class MainActivity extends AppCompatActivity {
 
         fetchPosts();
 
+        /**
+         * boton para añadir nueva tarea
+         */
+        Button mButtonAddTarea = (Button) findViewById(R.id.Button_add);
+        mButtonAddTarea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /**
+                 * llamada fragment activity
+                 */
+                FragmentManager fm = getSupportFragmentManager();
+                Fragment fragment = fm.findFragmentById(R.id.fragment_container);
+
+                if (fragment == null) {
+                    fragment = new Fragment();
+                    fm.beginTransaction()
+                            .add(R.id.fragment_container, fragment)
+                            .commit();
+                }
+            }
+
+        });
+
     }
 
     private void  fetchPosts(){
         progressBar.setVisibility(View.VISIBLE);
         Retrofitclient.getREtrofitClient().getPost().enqueue(new Callback<List<Post>>() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
                 if (response.isSuccessful() && response.body() != null)

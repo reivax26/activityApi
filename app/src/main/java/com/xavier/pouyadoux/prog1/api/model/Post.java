@@ -52,6 +52,8 @@ public class Post {
         return completed;
     }
 
+    public Boolean isRealizado() {return completed;}
+
     public void setCompleted(Boolean completed) {
         this.completed = completed;
     }
